@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:paw_catcher_admin/core/theme.dart';
+import 'package:paw_catcher_admin/presentation/pages/home/home.dart';
 import 'package:paw_catcher_admin/services/data/report.dart';
 import 'package:paw_catcher_admin/services/model/report_model.dart';
 
-class DetailPage extends StatelessWidget {
+class DetailPage extends ConsumerWidget {
   final ReportModel reportModel;
   const DetailPage({super.key, required this.reportModel});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final time = getFormattedTimestamp(reportModel.time);
+    final placeAsync = ref.watch(placeNameProvider(reportModel.location));
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -21,7 +24,7 @@ class DetailPage extends StatelessWidget {
         padding: const EdgeInsets.all(15.0),
         child: Column(
           children: [
-            // show location here and can go to map in app also give a rootmap here 
+            // show location here and can go to map in app also give a rootmap here
             Text(reportModel.title),
             SizedBox(
               height: 10,
@@ -37,7 +40,31 @@ class DetailPage extends StatelessWidget {
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [Text('place'), Text(time)],
+              children: [
+                placeAsync.when(
+                  data: (place) => SizedBox(
+                      width: 200,
+                      child: GestureDetector(
+                          onTap: () {
+                            // Navigate to HomePage with location data
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => HomePage(
+                                  location: reportModel.location,
+                                ),
+                              ),
+                            );
+                          },
+                          child: Text(
+                            place,
+                            overflow: TextOverflow.ellipsis,
+                          ))),
+                  loading: () => Text("Loading..."),
+                  error: (err, stack) => Text("Location error"),
+                ),
+                Text(time)
+              ],
             ),
             SizedBox(
               height: 10,

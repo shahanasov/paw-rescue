@@ -5,8 +5,9 @@ import 'package:paw_catcher_admin/core/theme.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 Widget textfield(
-    {required TextEditingController controller, String? hint, String? label}) {
+    {required TextEditingController controller, String? hint, String? label, String? Function(String?)? validator,}) {
   return TextFormField(
+    validator: validator,
     controller: controller,
     decoration: InputDecoration(
       hintStyle: TextStyle(color: AppTheme.textSecondary),
@@ -65,10 +66,12 @@ final passwordVisibilityProvider = StateProvider<bool>((ref) => false);
 Widget passwordfield({
   required TextEditingController controller,
   required WidgetRef ref,
+   String? Function(String?)? validator,
 }) {
   return Consumer(builder: (context, ref, child) {
     final isObscure = ref.watch(passwordVisibilityProvider);
     return TextFormField(
+      validator: validator,
       obscureText: !isObscure,
       controller: controller,
       decoration: InputDecoration(
@@ -135,4 +138,25 @@ Widget signinWithButton(String text) {
         ],
       ));
 }
+
+Future<void> showErrorDialog(BuildContext context, String message) {
+  return showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: const Text("Error", style: TextStyle(fontWeight: FontWeight.bold)),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(); // Close the dialog
+            },
+            child: const Text("OK"),
+          ),
+        ],
+      );
+    },
+  );
+}
+
 

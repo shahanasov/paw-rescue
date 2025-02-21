@@ -38,7 +38,7 @@ class HomePage extends ConsumerWidget {
       //     error: (err, stack) => Center(child: Text("Error: $err")),
       //     loading: () => Center(
       //           child: CircularProgressIndicator(
-      //             color: AppTheme().softPink,
+      //             color: AppTheme.softPink,
       //           ),
       //         )),
     );

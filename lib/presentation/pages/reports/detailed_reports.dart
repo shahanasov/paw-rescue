@@ -28,7 +28,7 @@ class DetailPage extends StatelessWidget {
             ),
             Container(
               decoration: BoxDecoration(
-                  color: AppTheme().softPink,
+                  color: AppTheme.softPink,
                   borderRadius: BorderRadius.circular(10)),
               height: 180,
             ),

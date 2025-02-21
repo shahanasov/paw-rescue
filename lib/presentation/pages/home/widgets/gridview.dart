@@ -33,7 +33,7 @@ class CustomGrid extends StatelessWidget {
                     children: [
                       Container(
                         decoration: BoxDecoration(
-                            color: AppTheme().softPink,
+                            color: AppTheme.softPink,
                             borderRadius: BorderRadius.circular(10)),
                         height: 80,
                       ),
@@ -55,7 +55,7 @@ class CustomGrid extends StatelessWidget {
                             height: 25,
                             width: 90,
                             decoration: BoxDecoration(
-                              color: AppTheme().safeGreen,
+                              color: AppTheme.safeGreen,
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Center(

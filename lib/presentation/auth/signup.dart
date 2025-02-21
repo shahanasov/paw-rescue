@@ -26,7 +26,7 @@ class SignUpScreen extends ConsumerWidget {
       Text(
         'Create account and choose favorite menu',
         style: TextStyle(
-          color: AppTheme().softPink,
+          color: AppTheme.softPink,
           fontSize: 16.0,
           fontWeight: FontWeight.normal,
         ),
@@ -84,7 +84,7 @@ class SignUpScreen extends ConsumerWidget {
       optsign(context, false),
     ];
     return Scaffold(
-      backgroundColor: AppTheme().backgroundColor,
+      backgroundColor: AppTheme.backgroundColor,
       appBar: AppBar(),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -97,7 +97,7 @@ class SignUpScreen extends ConsumerWidget {
       ),
       bottomSheet: IgnorePointer(
         child: Container(
-          color: AppTheme().backgroundColor,
+          color: AppTheme.backgroundColor,
           height: 80,
           child: Column(
             spacing: 6,
@@ -105,7 +105,7 @@ class SignUpScreen extends ConsumerWidget {
               Text('By clicking Register, you agree to our '),
               Text(
                 'Terms and Data Policy.',
-                style: TextStyle(color: AppTheme().softPink),
+                style: TextStyle(color: AppTheme.softPink),
               )
             ],
           ),

@@ -6,11 +6,15 @@ class ReportModel {
   // String imagePath;
   String auther;
   DateTime time;
+  GeoPoint location;
+  
   ReportModel(
       {required this.title,
       required this.report,
       required this.auther,
       required this.time,
+      required this.location,
+     
       // required this.imagePath
       });
 
@@ -18,12 +22,16 @@ class ReportModel {
   static ReportModel fromSnapshot(
       DocumentSnapshot<Map<String, dynamic>> snapshot) {
     Timestamp timestamp = snapshot.get('time') as Timestamp;
+    GeoPoint location = snapshot.get('location') as GeoPoint; 
     return ReportModel(
         auther: snapshot.get('auther') as String,
         title: snapshot.get('title') as String,
         report: snapshot.get('report') as String,
         // imagePath: snapshot.get('imagePath') as String,
+        location: location,
+    
         time: timestamp.toDate());
+      
   }
 
   // Convert UserModel to JSON for storing in Firestore
@@ -33,7 +41,9 @@ class ReportModel {
       'title': title,
       'report': report,
       // 'imagePath': imagePath,
-      'time': time
+      'time': time,
+      'location': location, 
+     
     };
   }
 }

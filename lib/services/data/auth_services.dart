@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,7 +6,7 @@ import 'package:paw_catcher_admin/services/model/model.dart';
 
 final authLoadingProvider = StateProvider<bool>((ref) => false);
 
-class AuthService {
+// class AuthService {
   final FirebaseAuth auth = FirebaseAuth.instance;
 
   Future<String?> signInWithEmail({
@@ -38,6 +37,7 @@ class AuthService {
     required String password,
     required String name,
     required WidgetRef ref,
+    required String phoneNumber
   }) async {
     ref.read(authLoadingProvider.notifier).state = true;
     try {
@@ -47,7 +47,7 @@ class AuthService {
       if (userId != null) {
         final userdetail = FirebaseFirestore.instance.collection("Admin");
         final newUser =
-            AdminModel(email: email, name: name, authId: userId).toJson();
+            AdminModel(email: email, name: name, authId: userId,phoneNumber: phoneNumber).toJson();
         userdetail.doc(userId).set(newUser);
       }
       return null;
@@ -60,6 +60,31 @@ class AuthService {
       ref.read(authLoadingProvider.notifier).state = false;
     }
   }
+
+  final userDetailsProvider =
+      FutureProvider<AdminModel?>((ref) async {
+    final String? userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId == null) {
+      throw Exception('User ID is null');
+    }
+
+    try {
+      final userDetailDoc = await FirebaseFirestore.instance
+          .collection('Admin')
+          .doc(userId)
+          .get();
+
+      if (userDetailDoc.exists) {
+        return AdminModel.fromSnapshot(userDetailDoc);
+      } else {
+        return null;
+      }
+    } on FirebaseException catch (e) {
+      log(e.code);
+      return null;
+    }
+  }
+  );
 
   /// **Error Handling**
   String getFirebaseAuthErrorMessage(String errorCode) {
@@ -109,4 +134,4 @@ class AuthService {
         return 'Something went wrong. Please try again.';
     }
   }
-}
+// }

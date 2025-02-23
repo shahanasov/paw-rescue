@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:paw_catcher_admin/core/fonts.dart';
 import 'package:paw_catcher_admin/core/theme.dart';
 import 'package:paw_catcher_admin/presentation/pages/reports/detailed_reports.dart';
-import 'package:paw_catcher_admin/services/data/report.dart';
+import 'package:paw_catcher_admin/services/data/report_services.dart';
 
 class NotificationPage extends ConsumerWidget {
   const NotificationPage({super.key});
@@ -16,14 +17,15 @@ class NotificationPage extends ConsumerWidget {
       appBar: AppBar(
         title: Text(
           "Nearby Reports",
-          style: TextStyle(color: AppTheme.backgroundColor),
+          style: TextStyle(
+            color: AppTheme.backgroundColor,),  
         ),
         backgroundColor: AppTheme.alertRed,
       ),
       body: reportsAsync.when(
         data: (reports) {
           return reports.isEmpty
-              ? const Center(child: Text("No nearby reports found"))
+              ?  Center(child: Text("No nearby reports found",style:Fonts.poppins,))
               : ListView.builder(
                   itemCount: reports.length,
                   itemBuilder: (context, index) {
@@ -50,7 +52,7 @@ class NotificationPage extends ConsumerWidget {
                           builder: (context, snapshot) {
                             if (snapshot.connectionState ==
                                 ConnectionState.waiting) {
-                              return const Text("Calculating distance...");
+                              return  Text("Calculating distance...",style: Fonts.poppins,);
                             } else if (snapshot.hasError) {
                               return const Text("Error getting distance");
                             } else {

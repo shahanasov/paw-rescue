@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:paw_catcher_admin/core/fonts.dart';
 import 'package:paw_catcher_admin/core/theme.dart';
 import 'package:paw_catcher_admin/presentation/pages/home/home.dart';
-import 'package:paw_catcher_admin/services/data/report.dart';
+import 'package:paw_catcher_admin/presentation/pages/reports/widget/volunteer.dart';
+import 'package:paw_catcher_admin/services/data/report_services.dart';
 import 'package:paw_catcher_admin/services/model/report_model.dart';
 
 class DetailPage extends ConsumerWidget {
@@ -11,13 +13,14 @@ class DetailPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+
     final time = getFormattedTimestamp(reportModel.time);
     final placeAsync = ref.watch(placeNameProvider(reportModel.location));
     return Scaffold(
       appBar: AppBar(
         title: Text(
           'Paw Rescue',
-          // style: Fonts.poppins,
+          style: Fonts.poppins,
         ),
       ),
       body: Padding(
@@ -60,8 +63,14 @@ class DetailPage extends ConsumerWidget {
                             place,
                             overflow: TextOverflow.ellipsis,
                           ))),
-                  loading: () => Text("Loading..."),
-                  error: (err, stack) => Text("Location error"),
+                  loading: () => Text(
+                    "Loading...",
+                    style: Fonts.poppins,
+                  ),
+                  error: (err, stack) => Text(
+                    "Location error",
+                    style: Fonts.poppins,
+                  ),
                 ),
                 Text(time)
               ],
@@ -74,9 +83,12 @@ class DetailPage extends ConsumerWidget {
               height: 10,
             ),
             // option for valandiar if some one taken show that too
+            volunteerButton(context: context,reportId:  reportModel.reportId)
           ],
         ),
       ),
     );
   }
+
+
 }

@@ -67,7 +67,7 @@ class SignInScreen extends ConsumerWidget {
               if (signInformKey.currentState!.validate()) {
                  ref.read(authLoadingProvider.notifier).state = true;
                  try{
-                    String? errorMessage = await AuthService(). signInWithEmail(
+                    String? errorMessage = await signInWithEmail(
                         ref: ref,
                         email: controller.text.trim(),
                         password: passwordController.text.trim(),
@@ -103,7 +103,7 @@ class SignInScreen extends ConsumerWidget {
                     } finally {
                       ref.read(authLoadingProvider.notifier).state = false;
                     }
-                // AuthService()
+                // 
                 //     .signInWithEmail(
                 //         ref: ref,
                 //         email: controller.text.trim(),

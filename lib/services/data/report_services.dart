@@ -1,14 +1,13 @@
 import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:paw_catcher_admin/services/model/report_model.dart';
-import 'package:timeago/timeago.dart' as timeago; 
+import 'package:timeago/timeago.dart' as timeago;
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
 
 final reportsProvider = StreamProvider.autoDispose<List<ReportModel>>((ref) {
   return FirebaseFirestore.instance
@@ -19,7 +18,7 @@ final reportsProvider = StreamProvider.autoDispose<List<ReportModel>>((ref) {
           .toList()); // Convert to List<ReportModel>
 });
 
- String getFormattedTimestamp(DateTime timestamp) {
+String getFormattedTimestamp(DateTime timestamp) {
   return timeago.format(timestamp, locale: 'en');
 }
 
@@ -27,8 +26,6 @@ final connectivityProvider = StreamProvider<ConnectivityResult>((ref) {
   return Connectivity().onConnectivityChanged.map((results) => results
       .first); // Convert List<ConnectivityResult> to a single ConnectivityResult
 });
-
-
 
 //  to fetch only nearby reports
 // Fetch user location using new locationSettings approach
@@ -65,21 +62,16 @@ final nearbyReportsProvider =
           ) /
           1000; // Convert meters to km
 
-
-
       return distance <= maxDistance; // Keep only nearby reports
     }).toList();
   });
 });
 
-
-
-
-
 Future<String> fetchPlaceName(GeoPoint location) async {
   final apiKey = "AIzaSyBzyHjj4QgqqdYjFmX3pcnfpgZ1Uc_NqYo";
-  final url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=${location.latitude},${location.longitude}&key=$apiKey";
- try {
+  final url =
+      "https://maps.googleapis.com/maps/api/geocode/json?latlng=${location.latitude},${location.longitude}&key=$apiKey";
+  try {
     final response = await http.get(Uri.parse(url));
 
     if (response.statusCode == 200) {
@@ -96,6 +88,26 @@ Future<String> fetchPlaceName(GeoPoint location) async {
 }
 
 // Create a Riverpod FutureProvider
-final placeNameProvider = FutureProvider.family<String, GeoPoint>((ref, location) async {
+final placeNameProvider =
+    FutureProvider.family<String, GeoPoint>((ref, location) async {
   return await fetchPlaceName(location);
 });
+
+Future<void> updateVolunteerStatus(String reportId) async {
+  final String? userId = FirebaseAuth.instance.currentUser?.uid;
+   if (userId == null) {
+    log("No user is logged in.");
+    return;
+  }
+  try {
+    await FirebaseFirestore.instance
+        .collection("Reports")
+        .doc(reportId)
+        .update({
+          'volunteer': true,
+          'volunteerId': userId
+        });
+  } catch (e) {
+    log("Error updating volunteer status: $e");
+  }
+}

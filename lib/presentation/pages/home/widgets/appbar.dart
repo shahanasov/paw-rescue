@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:paw_catcher_admin/core/fonts.dart';
 import 'package:paw_catcher_admin/presentation/pages/notification/notification_page.dart';
 
 AppBar customAppBar(
@@ -27,6 +28,7 @@ AppBar customAppBar(
     ),
     title: Text(
       'Paw Rescue',
+       style: Fonts.poppins,
     ),
   );
 }

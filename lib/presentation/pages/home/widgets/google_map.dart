@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:paw_catcher_admin/core/theme.dart';
 import 'package:paw_catcher_admin/services/data/map_services.dart';
+import 'package:shimmer/shimmer.dart';
 
 class MyGoogleMap extends ConsumerWidget {
   final GeoPoint? selectedLocation;
@@ -36,11 +37,11 @@ class MyGoogleMap extends ConsumerWidget {
               LatLng(selectedLocation!.latitude, selectedLocation!.longitude);
           markers.add(
             Marker(
-              markerId: MarkerId("selectedLocation"),
+              markerId: MarkerId("Reported Area"),
               icon: BitmapDescriptor.defaultMarkerWithHue(
                   BitmapDescriptor.hueRed),
               position: reportedPlace,
-              infoWindow: InfoWindow(title: "Selected Location"),
+              infoWindow: InfoWindow(title: "Reported Area"),
             ),
           );
         }
@@ -62,11 +63,16 @@ class MyGoogleMap extends ConsumerWidget {
             });
       },
       loading: () {
-        return Container(
-          color: AppTheme.softPink,
-          child: Center(
-            child: CircularProgressIndicator(
-              color: AppTheme.softPink,
+        // loading just like gpay
+        return Shimmer.fromColors(
+          baseColor: AppTheme.softPink,
+          highlightColor: AppTheme.softPink,
+          child: Container(
+            color: AppTheme.softPink,
+            child: Center(
+              child: CircularProgressIndicator(
+                color: AppTheme.softPink,
+              ),
             ),
           ),
         );

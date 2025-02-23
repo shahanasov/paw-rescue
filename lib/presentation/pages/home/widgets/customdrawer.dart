@@ -1,15 +1,17 @@
+import 'dart:developer';
+import 'package:paw_catcher_admin/presentation/pages/chat/chat_rooms.dart';
+import 'package:paw_catcher_admin/services/data/auth_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:paw_catcher_admin/core/theme.dart';
 import 'package:paw_catcher_admin/presentation/auth/sign_in.dart';
-import 'package:paw_catcher_admin/services/data/auth_services.dart';
 
 class CustomDrawer extends ConsumerWidget {
   const CustomDrawer({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // final userDetails = ref.watch(userDetailsProvider);
+    final userDetails = ref.watch(userDetailsProvider);
     return Drawer(
       child: Padding(
         padding: const EdgeInsets.all(15.0),
@@ -29,33 +31,36 @@ class CustomDrawer extends ConsumerWidget {
             SizedBox(
               height: 10,
             ),
-            // userDetails.when(
-            //   data: (user) {
-            //     return ListTile(
-            //       title: Text("Hi ${user?.name ?? ''} 👋"),
-            //     );
-            //   },
-            //   loading: () => ListTile(
-            //       title: Center(
-            //           child: LinearProgressIndicator(
-            //     color: AppTheme.softPink,
-            //   ))),
-            //   error: (err, stack) => ListTile(
-            //       title: Center(
-            //           child: LinearProgressIndicator(
-            //     color: AppTheme.softPink,
-            //   ))),
-            // ),
-            // Card(
-            //     color: AppTheme.softPink,
-            //     child: ListTile(
-            //       onTap: () {
-            //         // Navigator.of(context).push(
-            //         //     MaterialPageRoute(builder: (context) => ChatRooms()));
-            //       },
-            //       leading: Icon(Icons.chat),
-            //       title: Text('Chat with Rescue Team'),
-            //     )),
+            userDetails.when(
+              data: (user) {
+                log(user?.email ?? '');
+                return ListTile(
+                  title: Text("Hi ${user?.name ?? ''} 👋"),
+                );
+              },
+              loading: () => ListTile(
+                  title: Center(
+                      child: LinearProgressIndicator(
+                color: AppTheme.softPink,
+              ))),
+              error: (err, stack) => ListTile(
+                  title: Center(
+                      child: LinearProgressIndicator(
+                color: AppTheme.softPink,
+              ))),
+            ),
+            Card(
+                color: AppTheme.softPink,
+                child: ListTile(
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => MessagedUsersScreen(
+                            
+                            )));
+                  },
+                  leading: Icon(Icons.chat),
+                  title: Text('Chats'),
+                )),
             Card(
               color: AppTheme.softPink,
               child: ListTile(
@@ -81,14 +86,13 @@ class CustomDrawer extends ConsumerWidget {
                                 child: const Text('Cancel')),
                             TextButton(
                                 onPressed: () {
-                                  AuthService().signOut();
+                                  signOut();
                                   // Future.delayed(const Duration(seconds: 2),
-                                      // () {
-                                    navigatorContext.pushReplacement(
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                               SignInScreen()),
-                                    );
+                                  // () {
+                                  navigatorContext.pushReplacement(
+                                    MaterialPageRoute(
+                                        builder: (context) => SignInScreen()),
+                                  );
                                   // });
                                 },
                                 child: const Text('Log out'))

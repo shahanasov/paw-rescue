@@ -17,6 +17,7 @@ class SignUpScreen extends ConsumerWidget {
     TextEditingController controller = TextEditingController();
     TextEditingController passwordController = TextEditingController();
     TextEditingController nameController = TextEditingController();
+    TextEditingController phoneController = TextEditingController();
     List<Widget> widgetsList = [
       Text(
         'Sign Up',
@@ -49,6 +50,28 @@ class SignUpScreen extends ConsumerWidget {
         validator: (value) {
           if (value == null || value.trim().isEmpty) {
             return 'Name cannot be empty';
+          }
+          return null;
+        },
+      ),
+      Text(
+        'Phone Number',
+        style: TextStyle(
+          fontSize: 16.0,
+          fontWeight: FontWeight.w400,
+        ),
+      ),
+      textfield(
+        controller: phoneController,
+        hint: 'Your Phone Number',
+        validator: (value) {
+          if (value == null || value.trim().isEmpty) {
+            return 'Phone number cannot be empty';
+          }
+          final phoneRegex =
+              RegExp(r'^\d{10}$'); // Adjust regex based on your requirement
+          if (!phoneRegex.hasMatch(value)) {
+            return 'Enter a valid phone number';
           }
           return null;
         },
@@ -112,8 +135,9 @@ class SignUpScreen extends ConsumerWidget {
               ref.read(authLoadingProvider.notifier).state = true;
 
               try {
-                errorMessage = await AuthService().signUp(
+                errorMessage = await signUp(
                   ref: ref,
+                  phoneNumber: phoneController.text.trim(),
                   name: nameController.text.trim(),
                   email: controller.text.trim(),
                   password: passwordController.text.trim(),
@@ -133,7 +157,10 @@ class SignUpScreen extends ConsumerWidget {
               } catch (error) {
                 log("Error: $error");
                 if (context.mounted) {
-                   showErrorDialog(context, errorMessage??"Something went wrong. Please try again.");
+                  showErrorDialog(
+                      context,
+                      errorMessage ??
+                          "Something went wrong. Please try again.");
                   // ScaffoldMessenger.of(context).showSnackBar(
                   //   SnackBar(
                   //     content: Text('Something went wrong. Please try again.'),

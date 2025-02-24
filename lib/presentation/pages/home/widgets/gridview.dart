@@ -5,9 +5,11 @@ import 'package:paw_catcher_admin/services/model/report_model.dart';
 
 class CustomGrid extends StatelessWidget {
   final List<ReportModel> reportsList;
-  
-  const CustomGrid(
-      {super.key, required this.reportsList,});
+
+  const CustomGrid({
+    super.key,
+    required this.reportsList,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -15,14 +17,15 @@ class CustomGrid extends StatelessWidget {
         shrinkWrap: true,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             childAspectRatio: 0.8, crossAxisCount: 2),
-       
         itemCount: reportsList.length,
         itemBuilder: (context, index) {
           final report = reportsList[index];
           return GestureDetector(
             onTap: () {
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => DetailPage(reportModel: report,)));
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => DetailPage(
+                        reportModel: report,
+                      )));
             },
             child: SizedBox(
                 height: 450,
@@ -33,6 +36,10 @@ class CustomGrid extends StatelessWidget {
                     children: [
                       Container(
                         decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: NetworkImage(report.image),
+                              fit: BoxFit.cover,
+                            ),
                             color: AppTheme.softPink,
                             borderRadius: BorderRadius.circular(10)),
                         height: 80,

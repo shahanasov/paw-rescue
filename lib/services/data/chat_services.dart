@@ -13,7 +13,8 @@ class ChatServices {
 
     final String userEmailId = FirebaseAuth.instance.currentUser!.email!;
     final Timestamp timestamp = Timestamp.now();
-
+    
+    // String name =await getSenderDetails(userId);
     //create a new message
     MessageModel newMessage = MessageModel(
       senderId: userId,
@@ -34,7 +35,8 @@ class ChatServices {
           'participants': ids, // Ensure both participants are listed
           'lastMessageTimestamp':
               timestamp, // Optionally, track when the last message was sent
-              'lastMessage':message
+              'lastMessage':message,
+              
         },
             SetOptions(
                 merge:
@@ -128,6 +130,7 @@ class ChatServices {
     }
   }
 
+
   Future<List<Map<String, dynamic>>> getMessagedUsersWithDetails(String currentUserId) async {
   try {
     // Step 1: Fetch messaged user IDs
@@ -173,6 +176,25 @@ class ChatServices {
 }
 
 }
+
+ 
+//  final messagedUsersProvider = StreamProvider.family<List<Map<String, dynamic>>, String>((ref, userId) {
+//   return FirebaseFirestore.instance
+//       .collection('chat_rooms')
+//       .where('participants', arrayContains: userId) // Fetch all rooms where user is a participant
+//       .snapshots()
+//       .map((snapshot) {
+//         return snapshot.docs.map((doc) {
+//           final data = doc.data();
+//           return {
+//             'chatRoomId': doc.id,
+//             'lastMessage': data['lastMessage'] ?? '',
+//             'lastMessageTimestamp': data['lastMessageTimestamp'],
+//             'participants': data['participants'],
+//           };
+//         }).toList();
+//       });
+// });
 
 final chatRoomService = ChatServices();
 // Define the FutureProvider globally

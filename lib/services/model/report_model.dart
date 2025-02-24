@@ -4,7 +4,7 @@ class ReportModel {
   String title;
   String report;
   String reportId;
-  // String imagePath;
+  String image;
   String auther;
   DateTime time;
   GeoPoint location;
@@ -19,7 +19,7 @@ class ReportModel {
     required this.location,
     this.volunteer,
     this.volunteerId,
-    // required this.imagePath
+    required this.image
   });
 
   //  Convert Firestore document snapshot to UserModel
@@ -28,6 +28,7 @@ class ReportModel {
     Timestamp timestamp = snapshot.get('time') as Timestamp;
     GeoPoint location = snapshot.get('location') as GeoPoint;
     return ReportModel(
+      image: snapshot.get('image')as String,
         reportId: snapshot.get('reportId') as String,
         auther: snapshot.get('auther') as String,
         title: snapshot.get('title') as String,
@@ -50,7 +51,7 @@ class ReportModel {
       'title': title,
       'report': report,
       'reportId': reportId,
-      // 'imagePath': imagePath,
+      'image': image,
       'volunteer': volunteer,
       'time': time,
       'location': location,

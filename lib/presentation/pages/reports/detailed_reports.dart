@@ -13,7 +13,6 @@ class DetailPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     final time = getFormattedTimestamp(reportModel.time);
     final placeAsync = ref.watch(placeNameProvider(reportModel.location));
     return Scaffold(
@@ -34,6 +33,10 @@ class DetailPage extends ConsumerWidget {
             ),
             Container(
               decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: NetworkImage(reportModel.image),
+                    fit: BoxFit.cover,
+                  ),
                   color: AppTheme.softPink,
                   borderRadius: BorderRadius.circular(10)),
               height: 180,
@@ -83,12 +86,10 @@ class DetailPage extends ConsumerWidget {
               height: 10,
             ),
             // option for valandiar if some one taken show that too
-            volunteerButton(context: context,reportId:  reportModel.reportId)
+            volunteerButton(context: context, reportId: reportModel.reportId)
           ],
         ),
       ),
     );
   }
-
-
 }
